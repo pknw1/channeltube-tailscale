@@ -1,0 +1,36 @@
+---
+version: "3.7"
+services:
+  channeltube-tailscale:
+    env_file: .env
+    image: pknw1/channeltube-tailscale 
+    hostname: channeltube-tailscale
+    container_name: channeltube-tailscale
+    environment:
+      - HTTP_PROXY=http://100.100.69.69:3128
+      - TS_AUTHKEY=${TAILSCALE_AUTH}
+      - TS_STATE_DIR=/var/lib/tailscale
+      - TS_USERSPACE=false
+      - TS_ENABLE_METRICS=true
+      - VIRTUAL_HOST=channeltube.admin.pknw1.co.uk
+      - VIRTUAL_PORT=5000
+      - video_format_id=135
+      - audio_format_id=140
+
+    volumes:
+      - /etc/pknw1/config/channeltube/tailscale/state:/var/lib/tailscale
+      - /etc/pknw1/config/channeltube/channeltube:/channeltube/config
+      - /media/youtube:/channeltube/downloads
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    cap_add:
+      - net_admin
+    networks:
+      - proxy
+    dns:
+      - 8.8.8.8
+    restart: unless-stopped
+
+networks:
+  proxy:
+    external: true

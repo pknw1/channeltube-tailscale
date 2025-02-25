@@ -3,7 +3,7 @@ version: "3.7"
 services:
   channeltube-tailscale:
     env_file: .env
-    image: pknw1/channeltube-tailscale 
+    image: pknw1/channeltube-tailscale:v1
     hostname: channeltube-tailscale
     container_name: channeltube-tailscale
     environment:
